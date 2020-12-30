@@ -28,3 +28,7 @@ Unit Testing:
 ### License
 
 &copy; Niklas Arndt 2020, [MIT License](LICENSE.md)
+
+I do not own or claim any copyright of healthchecks.io. 
+healthchecks.io  is being created by Pēteris Caune and other contributors
+under the [BSD 3-Clause Revised License](https://github.com/healthchecks/healthchecks/blob/master/LICENSE).
