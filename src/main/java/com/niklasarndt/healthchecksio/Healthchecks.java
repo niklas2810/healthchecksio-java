@@ -63,6 +63,12 @@ public class Healthchecks {
      *                You will find this one your check dashboard.
      *
      * @return A new {@link Healthchecks} client, which you can use
+     *
+     * @throws IllegalArgumentException If the {@code hostUrl} is invalid.
+     *                                  The bare minimum is something like {@code http://localhost},
+     *                                  but the Protocol (http/https), Host (e.g. hc-ping.com),
+     *                                  (optionally) custom Port (e.g. 8080) and subpath (e.g. /healthchecks)
+     *                                  will be taken into account as well!
      */
     public static Healthchecks forUuid(String hostUrl, String uuid) {
         return new Healthchecks(hostUrl, uuid);
@@ -86,11 +92,14 @@ public class Healthchecks {
             URL url = new URL(host);
             if (url.getHost() == null || url.getHost().length() == 0)
                 throw new IllegalArgumentException("No host specified in " + url.toString());
+
+            this.host = url.getProtocol() + "://" + url.getHost()
+                    + (url.getPort() != -1 ? ":" + url.getPort() : "")
+                    + url.getPath();
         } catch (MalformedURLException e) {
             throw new IllegalArgumentException("The host URL " + host + " is invalid!", e);
         }
 
-        this.host = host.endsWith("/") ? host : host + "/";
         this.uuid = uuid;
 
         this.baseUrl = this.host + uuid;
@@ -233,7 +242,7 @@ public class Healthchecks {
                 path, host, body != null);
 
         Request.Builder builder = new Request.Builder()
-                .url("https://hc-ping.com/" + uuid + path);
+                .url(baseUrl + path);
 
         if (body != null)
             builder.post(RequestBody.create(plainTextType, body));

@@ -58,4 +58,23 @@ public class Tests {
         assertNotEquals("UNKNOWN", HealthchecksInfo.TARGETJDK());
         assertNotEquals("UNKNOWN", HealthchecksInfo.URL());
     }
+
+    @Test
+    public void testUrlValidation() {
+        assertThrows(IllegalArgumentException.class, () ->
+                Healthchecks.forUuid("", null));
+        assertThrows(IllegalArgumentException.class, () ->
+                Healthchecks.forUuid("http://", null));
+        assertDoesNotThrow(() ->
+                Healthchecks.forUuid("http://localhost", null));
+        assertDoesNotThrow(() ->
+                Healthchecks.forUuid("http://localhost:8080", null));
+        assertDoesNotThrow(() ->
+                Healthchecks.forUuid("http://localhost/healthchecks", null));
+        assertDoesNotThrow(() ->
+                Healthchecks.forUuid("http://localhost:8080/healthchecks", null));
+        assertDoesNotThrow(() ->
+                Healthchecks.forUuid("https://some.domain.com:8080/healthchecks", null));
+
+    }
 }
