@@ -61,20 +61,23 @@ public class Tests {
 
     @Test
     public void testUrlValidation() {
+        //This UUID is obviously not valid and just here to satisfy the library.
+        String uuid = "abc";
+
         assertThrows(IllegalArgumentException.class, () ->
-                Healthchecks.forUuid("", null));
+                Healthchecks.forUuid("", uuid));
         assertThrows(IllegalArgumentException.class, () ->
-                Healthchecks.forUuid("http://", null));
+                Healthchecks.forUuid("http://", uuid));
         assertDoesNotThrow(() ->
-                Healthchecks.forUuid("http://localhost", null));
+                Healthchecks.forUuid("http://localhost", uuid));
         assertDoesNotThrow(() ->
-                Healthchecks.forUuid("http://localhost:8080", null));
+                Healthchecks.forUuid("http://localhost:8080", uuid));
         assertDoesNotThrow(() ->
-                Healthchecks.forUuid("http://localhost/healthchecks", null));
+                Healthchecks.forUuid("http://localhost/healthchecks", uuid));
         assertDoesNotThrow(() ->
-                Healthchecks.forUuid("http://localhost:8080/healthchecks", null));
+                Healthchecks.forUuid("http://localhost:8080/healthchecks", uuid));
         assertDoesNotThrow(() ->
-                Healthchecks.forUuid("https://some.domain.com:8080/healthchecks", null));
+                Healthchecks.forUuid("https://some.domain.com:8080/healthchecks", uuid));
 
     }
 }

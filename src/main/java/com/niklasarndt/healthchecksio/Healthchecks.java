@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
 public class Healthchecks {
@@ -34,7 +35,7 @@ public class Healthchecks {
      * <p>Use {@link CompletableFuture#get()} to retrieve your response!</p>
      *
      * @param uuid The universal unique identifier (UUID) of your check.
-     *             You will find this one your check dashboard.
+     *             You will find this one your check dashboard. <b>Must not be null.</b>
      *
      * @return A new {@link Healthchecks} client, which you can use
      */
@@ -59,9 +60,9 @@ public class Healthchecks {
      *
      * @param hostUrl The URL of your custom healthchecks instance. Normally, that's hc-ping.com,
      *                then you can use the constructor with only one parameter: {@link #forUuid(String)}
-     *                If you have a self-hosted instance, you can use this one as well.
+     *                If you have a self-hosted instance, you can use this one as well. <b>Must not be null.</b>
      * @param uuid    The universal unique identifier (UUID) of your check.
-     *                You will find this one your check dashboard.
+     *                You will find this one your check dashboard. <b>Must not be null.</b>
      *
      * @return A new {@link Healthchecks} client, which you can use
      *
@@ -86,6 +87,8 @@ public class Healthchecks {
     }
 
     private Healthchecks(String host, String uuid) {
+        Objects.requireNonNull(host);
+        Objects.requireNonNull(uuid);
         host = host.trim();
 
         //URL validation
