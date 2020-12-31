@@ -1,1 +1,0 @@
-typeSearchIndex = [{"l":"All Classes","url":"allclasses-index.html"},{"p":"com.niklasarndt.healthchecksio","l":"Healthchecks"},{"p":"com.niklasarndt.healthchecksio","l":"HealthchecksInfo"},{"p":"com.niklasarndt.healthchecksio","l":"OkHttpResponseFuture"},{"p":"com.niklasarndt.healthchecksio","l":"UserAgentInterceptor"}]
