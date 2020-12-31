@@ -33,5 +33,13 @@ jobs:
           restore-keys: |
             build-${{ runner.os }}-
 
-      - name: 📦 Test Project
-        run: mvn clean test
+      - name: 🔬📚 Test Project & Generate Javadocs
+        run: mvn clean test javadoc:javadoc
+
+      - name: 🚀 Deploy Javadocs to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@3.7.1
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH: gh-pages
+          FOLDER: target/site
+          CLEAN: true
