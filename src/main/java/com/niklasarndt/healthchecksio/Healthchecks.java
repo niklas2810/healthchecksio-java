@@ -5,10 +5,15 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.concurrent.CompletableFuture;
 
 public class Healthchecks {
 
+    private static final Logger LOG = LoggerFactory.getLogger(Healthchecks.class);
     private static final UserAgentInterceptor userAgent = new UserAgentInterceptor();
     private static final MediaType plainTextType = MediaType.parse("text/plain");
 
@@ -36,12 +41,60 @@ public class Healthchecks {
         return new Healthchecks(uuid);
     }
 
+    /**
+     * <p>Creates a new healthchecks.io Client <b>for a custom host</b>.</p>
+     * <br>
+     * <p>Currently supported messages:</p>
+     * <ul>
+     *     <li>{@code start()}: The process which the check tracks just started.</li>
+     *     <li>{@code success()}: The process which the check tracks completed successfully.</li>
+     *     <li>{@code fail()}: The process which the check tracks failed (this will cause an alert!).</li>
+     * </ul>
+     * <p>Optionally, you can also pass a parameter {@link String} {@code body} which will be stored
+     * together with your status message on healthchecks.io.</p>
+     * <p>All requests will be sent asynchronously and return a {@link CompletableFuture} with a
+     * {@link Response} object.</p>
+     * <p>Use {@link CompletableFuture#get()} to retrieve your response!</p>
+     *
+     * @param hostUrl The URL of your custom healthchecks instance. Normally, that's hc-ping.com,
+     *                then you can use the constructor with only one parameter: {@link #forUuid(String)}
+     *                If you have a self-hosted instance, you can use this one as well.
+     * @param uuid    The universal unique identifier (UUID) of your check.
+     *                You will find this one your check dashboard.
+     *
+     * @return A new {@link Healthchecks} client, which you can use
+     */
+    public static Healthchecks forUuid(String hostUrl, String uuid) {
+        return new Healthchecks(hostUrl, uuid);
+    }
+
     private final OkHttpClient client = new OkHttpClient.Builder()
             .addInterceptor(userAgent).build();
+    private final String host;
     private final String uuid;
+    private final String baseUrl;
 
     private Healthchecks(String uuid) {
+        this("https://hc-ping.com/", uuid);
+    }
+
+    private Healthchecks(String host, String uuid) {
+        host = host.trim();
+
+        //URL validation
+        try {
+            URL url = new URL(host);
+            if (url.getHost() == null || url.getHost().length() == 0)
+                throw new IllegalArgumentException("No host specified in " + url.toString());
+        } catch (MalformedURLException e) {
+            throw new IllegalArgumentException("The host URL " + host + " is invalid!", e);
+        }
+
+        this.host = host.endsWith("/") ? host : host + "/";
         this.uuid = uuid;
+
+        this.baseUrl = this.host + uuid;
+        LOG.debug("Host url has been set to {}", this.host);
     }
 
     /**
@@ -111,6 +164,38 @@ public class Healthchecks {
     }
 
     /**
+     * <p>Notifies healthchecks.io about the completion of an event with
+     * the exit code {@code code}.</p>
+     *
+     * @param code The exit code of the event (0-255). If the code is equal to 0, healthchecks.io
+     *             will interpret this as a success, all other exit codes will raise an alert!
+     *
+     * @return A {@link CompletableFuture} with a
+     *         * {@link Response} object. Use {@link CompletableFuture#get()} to retrieve your response!
+     */
+    public CompletableFuture<Response> exitCode(int code) {
+        return exitCode(code, null);
+    }
+
+    /**
+     * <p>Notifies healthchecks.io about the completion of an event with
+     * the exit code {@code code}.</p>
+     *
+     * @param code The exit code of the event (0-255). If the code is equal to 0, healthchecks.io
+     *             will interpret this as a success, all other exit codes will raise an alert!
+     * @param body A message (plain text) which will be stored on healthchecks.io, together with this status message.
+     *
+     * @return A {@link CompletableFuture} with a
+     *         * {@link Response} object. Use {@link CompletableFuture#get()} to retrieve your response!
+     */
+    public CompletableFuture<Response> exitCode(int code, String body) {
+        if (code < 0 || code > 255)
+            throw new IllegalArgumentException("Only values from 0 to 255 are valid exit codes!");
+
+        return sendHeartbeat("/" + code, body);
+    }
+
+    /**
      * <p>Private executor for status check messages.</p>
      * <br>
      * <p>First off, the request will be built. If a {@code body} has
@@ -125,8 +210,30 @@ public class Healthchecks {
      *         * {@link Response} object. Use {@link CompletableFuture#get()} to retrieve your response!
      */
     private CompletableFuture<Response> sendHeartbeat(EventType type, String body) {
+        return sendHeartbeat(type.path, body);
+    }
+
+
+    /**
+     * <p>Private executor for status check messages.</p>
+     * <br>
+     * <p>First off, the request will be built. If a {@code body} has
+     * been specified, this one will be put in the response body as well.</p>
+     * <p>Afterwards a new call in enqueued, and the {@link CompletableFuture}
+     * object is returned.</p>
+     *
+     * @param path The subpath in the URL, e.g. {@code /fail} or {@code /1} (for exit code one).
+     * @param body A message (plain text) which will be stored on healthchecks.io, together with this status message.
+     *
+     * @return A {@link CompletableFuture} with a
+     *         * {@link Response} object. Use {@link CompletableFuture#get()} to retrieve your response!
+     */
+    private CompletableFuture<Response> sendHeartbeat(String path, String body) {
+        LOG.debug("Sending signal to path {} (host: {}, has body: {})",
+                path, host, body != null);
+
         Request.Builder builder = new Request.Builder()
-                .url("https://hc-ping.com/" + uuid + type);
+                .url("https://hc-ping.com/" + uuid + path);
 
         if (body != null)
             builder.post(RequestBody.create(plainTextType, body));

@@ -51,7 +51,8 @@ public class OkHttpResponseFuture implements Callback {
      */
     @Override
     public void onResponse(Call call, Response response) throws IOException {
-        LOGGER.debug("Completed call to {}, response is {}", call.request().url(),
+        LOGGER.debug("Completed call to {}, response is {}", call.request().url().pathSegments()
+                        .get(call.request().url().pathSegments().size() - 1),
                 response.code());
 
         future.complete(response);
