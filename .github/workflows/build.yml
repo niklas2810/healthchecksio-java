@@ -33,11 +33,5 @@ jobs:
           restore-keys: |
             build-${{ runner.os }}-
 
-      - name: 📦 Build Project
-        run: mvn clean install
-
-      - name: 🚀️ Upload artifacts
-        uses: actions/upload-artifact@v2
-        with:
-          name: jar-files
-          path: ./target/*.jar
+      - name: 📦 Test Project
+        run: mvn clean test
