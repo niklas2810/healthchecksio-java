@@ -7,6 +7,9 @@
 <a href="https://github.com/niklas2810/healthchecksio-java/actions">
 <img alt="GitHub Build" src="https://img.shields.io/github/workflow/status/niklas2810/healthchecksio-java/Build%20Project?logo=github&style=for-the-badge">
 </a>
+<a href="https://niklas2810.github.io/healthchecksio-java/apidocs/">
+<img alt="Javadocs Link" src="https://img.shields.io/badge/Javadocs-Link-yellow?style=for-the-badge">
+</a>
 </p>
 
 `healthchecksio-java` is a Java Library for the REST API of [healthchecks.io](https://healthchecks.io/) (it supports private instances as well). 
@@ -29,6 +32,8 @@ You can find more information on how to setup up and use this library down below
 ## Installation
 
 `healthchecksio-java` is available on [Maven Central](https://search.maven.org/artifact/com.niklasarndt/healthchecksio-java). You can find alternative importing methods (as well as direct download options) there.
+
+The Javadocs of this project are available [here](https://niklas2810.github.io/healthchecksio-java/apidocs/).
 
 Maven:
 ```xml
