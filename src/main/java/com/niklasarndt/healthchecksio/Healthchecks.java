@@ -16,6 +16,7 @@ public class Healthchecks {
     private static final Logger LOG = LoggerFactory.getLogger(Healthchecks.class);
     private static final UserAgentInterceptor userAgent = new UserAgentInterceptor();
     private static final MediaType plainTextType = MediaType.parse("text/plain");
+    private static final String HEALTHCHECKS_HOST = "https://hc-ping.com/";
 
     /**
      * <p>Creates a new healthchecks.io Client.</p>
@@ -81,29 +82,37 @@ public class Healthchecks {
     private final String baseUrl;
 
     private Healthchecks(String uuid) {
-        this("https://hc-ping.com/", uuid);
+        this(HEALTHCHECKS_HOST, uuid);
     }
 
     private Healthchecks(String host, String uuid) {
         host = host.trim();
 
         //URL validation
-        try {
-            URL url = new URL(host);
-            if (url.getHost() == null || url.getHost().length() == 0)
-                throw new IllegalArgumentException("No host specified in " + url.toString());
+        if (!host.equals(HEALTHCHECKS_HOST))
+            this.host = validateUrl(host);
+        else //Skip URL validation for default host (already validated)
+            this.host = host;
 
-            this.host = url.getProtocol() + "://" + url.getHost()
-                    + (url.getPort() != -1 ? ":" + url.getPort() : "")
-                    + url.getPath();
-        } catch (MalformedURLException e) {
-            throw new IllegalArgumentException("The host URL " + host + " is invalid!", e);
-        }
 
         this.uuid = uuid;
 
         this.baseUrl = this.host + uuid;
         LOG.debug("Host url has been set to {}", this.host);
+    }
+
+    private String validateUrl(String host) {
+        try {
+            URL url = new URL(host);
+            if (url.getHost() == null || url.getHost().length() == 0)
+                throw new IllegalArgumentException("No host specified in " + url.toString());
+
+            return url.getProtocol() + "://" + url.getHost()
+                    + (url.getPort() != -1 ? ":" + url.getPort() : "")
+                    + url.getPath();
+        } catch (MalformedURLException e) {
+            throw new IllegalArgumentException("The host URL " + host + " is invalid!", e);
+        }
     }
 
     /**
