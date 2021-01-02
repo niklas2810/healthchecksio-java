@@ -9,6 +9,11 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+/**
+ * Internal class to parse timestamps from the API.
+ *
+ * @since 1.0.1
+ */
 public class TimestampDeserializer extends JsonDeserializer<Date> {
 
     private static final SimpleDateFormat FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZZZZZ");
