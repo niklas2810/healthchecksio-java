@@ -1,1 +1,5 @@
 com.niklasarndt.healthchecksio
+com.niklasarndt.healthchecksio.exception
+com.niklasarndt.healthchecksio.json
+com.niklasarndt.healthchecksio.model
+com.niklasarndt.healthchecksio.util
