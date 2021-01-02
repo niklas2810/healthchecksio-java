@@ -1,7 +1,7 @@
 package com.niklasarndt.healthchecksio.exception;
 
 /**
- * <p></p>A {@link ParseException} is thrown whenever the Jackson API
+ * <p>A {@link ParseException} is thrown whenever the Jackson API
  * stops working (API read / write). There are two common cases why this happens:</p>
  *
  * <ol>

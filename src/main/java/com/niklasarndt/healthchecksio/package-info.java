@@ -1,5 +1,5 @@
 /**
- * <h3>Welcome to the healthchecks-io Documentation!</h3>
+ * <b>Welcome to the healthchecks-io Documentation!</b>
  *
  * <p>The basic classes of the project are located here:</p>
  *
