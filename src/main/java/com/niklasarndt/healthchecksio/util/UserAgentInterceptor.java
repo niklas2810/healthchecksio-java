@@ -1,5 +1,6 @@
-package com.niklasarndt.healthchecksio;
+package com.niklasarndt.healthchecksio.util;
 
+import com.niklasarndt.healthchecksio.HealthchecksInfo;
 import okhttp3.Interceptor;
 import okhttp3.Response;
 import java.io.IOException;
@@ -12,10 +13,6 @@ import java.io.IOException;
 public class UserAgentInterceptor implements Interceptor {
 
     private static final String AGENT = "healthchecksio-java:" + HealthchecksInfo.VERSION();
-
-    protected UserAgentInterceptor() {
-
-    }
 
     /**
      * Intercepts a request.

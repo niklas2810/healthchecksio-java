@@ -1,5 +1,6 @@
-package com.niklasarndt.healthchecksio;
+package com.niklasarndt.healthchecksio.util;
 
+import com.niklasarndt.healthchecksio.Healthchecks;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
@@ -19,9 +20,6 @@ public class OkHttpResponseFuture implements Callback {
      * <p>This is the {@link CompletableFuture} object where the response will be stored.</p>
      */
     public final CompletableFuture<Response> future = new CompletableFuture<>();
-
-    protected OkHttpResponseFuture() {
-    }
 
     /**
      * <p>Reports the request error to the {@link #future} object.</p>

@@ -2,6 +2,8 @@ package com.niklasarndt.healthchecksio;
 
 import com.niklasarndt.healthchecksio.exception.UnauthorizedException;
 import com.niklasarndt.healthchecksio.model.Check;
+import com.niklasarndt.healthchecksio.util.OkHttpResponseFuture;
+import com.niklasarndt.healthchecksio.util.UserAgentInterceptor;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;

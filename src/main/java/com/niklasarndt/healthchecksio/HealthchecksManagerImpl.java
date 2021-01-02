@@ -9,6 +9,7 @@ import com.niklasarndt.healthchecksio.model.Check;
 import com.niklasarndt.healthchecksio.model.Integration;
 import com.niklasarndt.healthchecksio.model.Ping;
 import com.niklasarndt.healthchecksio.model.StatusFlip;
+import com.niklasarndt.healthchecksio.util.OkHttpResponseFuture;
 import com.niklasarndt.healthchecksio.util.QueryParam;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
