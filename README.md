@@ -16,7 +16,7 @@
 For now, only client features (Pinging API) are supported. 
 However, the Management API is on my ToDo-List!
 
-You can find more information on how to setup up and use this library down below.
+You can find more information on how to set up and use this library down below.
 
 <hr>
 
@@ -55,7 +55,7 @@ Creating a Healthchecks client is quite straightforward.
 
 ```java
 //Creates a new healthchecks.io pinging client for the specified UUID
-Healthchecks client = Healthchecks.forUuid("<uuid>"); 
+HealthchecksClient client = Healthchecks.forUuid("<uuid>"); 
 ```
 
 Use these commands to send events to healthchecks.io:
@@ -87,7 +87,7 @@ From now on, only warnings will be added to your logs.
 You can also use this library with your self-hosted instance. To do this, simply use a different constructor function!
 
 ```java
-Healthchecks client = Healthchecks.forUuid("https://healthchecks.example.com", "<uuid>"); 
+HealthchecksClient client = Healthchecks.forUuid("https://healthchecks.example.com", "<uuid>"); 
 ```
 
 ## Contributing
