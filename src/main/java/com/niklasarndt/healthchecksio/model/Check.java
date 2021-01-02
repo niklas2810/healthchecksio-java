@@ -10,6 +10,15 @@ import lombok.Data;
 import java.net.URL;
 import java.util.Date;
 
+/**
+ * <p>The model class {@link Check} represents a status check, identified by a UUID (write access)
+ * or unique key (read-only).</p>
+ *
+ * <p>For more information on the models, visit the
+ * <a href="https://github.com/niklas2810/healthchecksio-java/wiki/Model-Overview">wiki</a>.</p>
+ *
+ * @since 1.0.1
+ */
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Check {
@@ -29,7 +38,7 @@ public class Check {
     private int lastDuration;
 
     @JsonProperty(value = "n_pings", access = WRITE_ONLY)
-    private int pingAmount;
+    private int pings;
 
     @JsonProperty(value = "status", access = WRITE_ONLY)
     private String status;
@@ -61,11 +70,11 @@ public class Check {
 
     private String schedule;
 
-    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-    private int timeout;
-
     @JsonProperty("tz")
     private String timeZone;
+
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    private int timeout;
 
     @JsonProperty(value = "unique_key", access = WRITE_ONLY)
     private String readOnlyKey;
@@ -88,6 +97,22 @@ public class Check {
             return null;
 
         return pingUrl.toString().substring(pingUrl.toString().lastIndexOf("/") + 1);
+    }
+
+    public boolean hasIntegration(Integration integration) {
+        return hasIntegration(integration.getId());
+    }
+
+    public boolean hasIntegration(String id) {
+        if (integrations == null || integrations.length() == 0)
+            return false;
+        String[] opts = integrations.split(",");
+        for (String opt : opts) {
+            if (opt.equals(id))
+                return true;
+        }
+
+        return false;
     }
 
     @JsonIgnore
