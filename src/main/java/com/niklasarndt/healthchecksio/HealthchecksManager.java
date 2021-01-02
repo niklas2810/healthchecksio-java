@@ -60,7 +60,8 @@ public interface HealthchecksManager {
     }
 
     default CompletableFuture<StatusFlip[]> getFlips(String uuid) {
-        return getFlips(uuid, Long.MAX_VALUE);
+        //Seconds value: https://github.com/healthchecks/healthchecks/blob/63beeb05a177f4c47d4bad46b511d37973b38416/hc/api/forms.py#L19
+        return getFlips(uuid, 31536000);
     }
 
     CompletableFuture<StatusFlip[]> getFlips(String uuid, long seconds);
