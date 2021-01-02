@@ -1,9 +1,10 @@
 package com.niklasarndt.healthchecksio.util;
 
-import com.niklasarndt.healthchecksio.Healthchecks;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.util.concurrent.CompletableFuture;
 
@@ -15,6 +16,8 @@ import java.util.concurrent.CompletableFuture;
  * <p>With much inspiration from <a href="https://stackoverflow.com/questions/42308439/java-retrieving-result-from-okhttp-asynchronous-get">stackoverflow</a>.</p>
  */
 public class OkHttpResponseFuture implements Callback {
+
+    private static final Logger LOG = LoggerFactory.getLogger(OkHttpResponseFuture.class);
 
     /**
      * <p>This is the {@link CompletableFuture} object where the response will be stored.</p>
@@ -29,7 +32,7 @@ public class OkHttpResponseFuture implements Callback {
      */
     @Override
     public void onFailure(Call call, IOException e) {
-        Healthchecks.LOG.debug("Failed to contact healthchecks.io!", e);
+        LOG.debug("Failed to contact healthchecks.io!", e);
 
         future.completeExceptionally(e);
     }
@@ -41,7 +44,7 @@ public class OkHttpResponseFuture implements Callback {
      */
     @Override
     public void onResponse(Call call, Response response) throws IOException {
-        Healthchecks.LOG.debug("Completed call to {}, response is {}",
+        LOG.debug("Completed call to {}, response is {}",
                 call.request().url().pathSegments()
                         .get(call.request().url().pathSegments().size() - 1),
                 response.code());
