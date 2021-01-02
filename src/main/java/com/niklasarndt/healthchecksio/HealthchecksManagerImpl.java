@@ -20,6 +20,12 @@ import java.util.Arrays;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
+/**
+ * <p>Please check out {@link HealthchecksManager} for documentation (this is just the
+ * implementation).</p>
+ *
+ * @since 1.0.1
+ */
 public class HealthchecksManagerImpl implements HealthchecksManager {
 
     private static final String HEALTHCHECKS_HOST = "https://healthchecks.io";
@@ -94,15 +100,12 @@ public class HealthchecksManagerImpl implements HealthchecksManager {
     }
 
     @Override
-    public CompletableFuture<Check> getCheck(String uuid) {
-        return parseJsonResponse(request("/checks/" + uuid), Check.class);
+    public CompletableFuture<Check> getCheck(String key) {
+        return parseJsonResponse(request("/checks/" + key), Check.class);
     }
 
     @Override
     public CompletableFuture<Check> createCheck(Check check) {
-        if (check.isReadOnly())
-            throw new UnauthorizedException();
-
         return request("/checks/", writeJson(check)).thenApply(response -> {
             verifyResponse(response);
 
@@ -171,15 +174,15 @@ public class HealthchecksManagerImpl implements HealthchecksManager {
     }
 
     @Override
-    public CompletableFuture<StatusFlip[]> getFlips(String uuid, long seconds) {
-        return parseFirstNode(request("/checks/" + uuid + "/flips", null,
+    public CompletableFuture<StatusFlip[]> getFlips(String key, long seconds) {
+        return parseFirstNode(request("/checks/" + key + "/flips", null,
                 new QueryParam[]{new QueryParam("seconds", seconds + "")}),
                 StatusFlip[].class);
     }
 
     @Override
-    public CompletableFuture<StatusFlip[]> getFlips(String uuid, long start, long end) {
-        return parseFirstNode(request("/checks/" + uuid + "/flips", null,
+    public CompletableFuture<StatusFlip[]> getFlips(String key, long start, long end) {
+        return parseFirstNode(request("/checks/" + key + "/flips", null,
                 new QueryParam[]{new QueryParam("start", start + ""),
                         new QueryParam("end", end + "")}),
                 StatusFlip[].class);

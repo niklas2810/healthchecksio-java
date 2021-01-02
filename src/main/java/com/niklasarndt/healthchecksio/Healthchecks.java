@@ -16,12 +16,48 @@ public class Healthchecks {
     protected static final UserAgentInterceptor USER_AGENT = new UserAgentInterceptor();
     protected static final Logger LOG = LoggerFactory.getLogger(Healthchecks.class);
     protected static final MediaType PLAIN_TEXT = MediaType.parse("text/plain");
-    public static HealthchecksManager manager(String host, String apiKey) {
-        return new HealthchecksManagerImpl(host, apiKey);
-    }
 
+    /**
+     * <p>Create a new healthchecks.io Manager.</p>
+     *
+     * <p>This object supports listing, creating, updating, pausing and deleting checks.</p>
+     *
+     * <p>It can list status flips, individual pings and notification channels (integrations)
+     * as well.</p>
+     *
+     * <p>Please note that if you use a <b>read-only api key</b>, some features might not
+     * be available to you.</p>
+     *
+     * @param apiKey Your read-only or normal API key. Please note that if you use a <b>read-only api key</b>, some features might not
+     *               * be available to you.
+     *
+     * @return A new {@link HealthchecksManager}, which you can use to utilize the Management API.
+     */
     public static HealthchecksManager manager(String apiKey) {
         return new HealthchecksManagerImpl(apiKey);
+    }
+
+    /**
+     * <p>Create a new healthchecks.io Manager for a custom host URL.</p>
+     *
+     * <p>This object supports listing, creating, updating, pausing and deleting checks.</p>
+     *
+     * <p>It can list status flips, individual pings and notification channels (integrations)
+     * as well.</p>
+     *
+     * <p>Please note that if you use a <b>read-only api key</b>, some features might not
+     * be available to you.</p>
+     *
+     * @param hostUrl The URL of your custom healthchecks instance. Normally, that's healthchecks.io,
+     *                then you can use the constructor with only one parameter: {@link #manager(String)}
+     *                If you have a self-hosted instance, you can use this one as well. <b>Must not be null.</b>
+     * @param apiKey  Your read-only or normal API key. Please note that if you use a <b>read-only api key</b>, some features might not
+     *                * be available to you.
+     *
+     * @return A new {@link HealthchecksManager}, which you can use to utilize the Management API.
+     */
+    public static HealthchecksManager manager(String hostUrl, String apiKey) {
+        return new HealthchecksManagerImpl(hostUrl, apiKey);
     }
 
     /**

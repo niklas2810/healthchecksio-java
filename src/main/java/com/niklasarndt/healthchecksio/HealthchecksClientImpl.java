@@ -9,6 +9,12 @@ import java.net.URL;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
+/**
+ * <p>Please check out {@link HealthchecksClient} for documentation (this is just the
+ * implementation).</p>
+ *
+ * @since 1.0.0
+ */
 public class HealthchecksClientImpl implements HealthchecksClient {
 
     private static final String HEALTHCHECKS_HOST = "https://hc-ping.com/";

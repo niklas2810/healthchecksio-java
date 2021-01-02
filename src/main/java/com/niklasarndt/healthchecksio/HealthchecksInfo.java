@@ -5,6 +5,11 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.Properties;
 
+/**
+ * <p>Contains information about the current build (e.g. version and build date).</p>
+ *
+ * @since 1.0.0
+ */
 public class HealthchecksInfo {
 
     private static String NAME;

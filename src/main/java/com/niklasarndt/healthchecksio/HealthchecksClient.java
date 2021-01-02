@@ -3,6 +3,12 @@ package com.niklasarndt.healthchecksio;
 import okhttp3.Response;
 import java.util.concurrent.CompletableFuture;
 
+/**
+ * <p>Utilizes the <a href="https://healthchecks.io/docs/http_api/">Pinging API</a>
+ * to send status reports to a healthchecks.io host.</p>
+ *
+ * @since 1.0.0
+ */
 public interface HealthchecksClient {
 
     /**
