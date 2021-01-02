@@ -4,7 +4,6 @@ import com.niklasarndt.healthchecksio.Healthchecks;
 import com.niklasarndt.healthchecksio.HealthchecksInfo;
 import okhttp3.Response;
 import static org.junit.jupiter.api.Assertions.*;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import java.util.concurrent.CompletableFuture;
@@ -13,23 +12,17 @@ import java.util.concurrent.ExecutionException;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class Tests {
 
-    private Healthchecks healthchecks;
-
-    @BeforeAll
-    public void setUp() {
-        String uuid = System.getenv("HEALTHCHECKS_UUID");
-
-        if (uuid != null)
-            healthchecks = Healthchecks.forUuid(uuid);
-        else
-            System.err.println("WARNING: The environment variable HEALTHCHECKS_UUID has not been " +
-                    "set. To run API-related tests, please change this!");
-    }
-
     @Test
     public void testApi() throws ExecutionException, InterruptedException {
-        if (healthchecks == null)
+        String uuid = System.getenv("HEALTHCHECKS_UUID");
+
+        if (uuid == null) {
+            System.err.println("WARNING: The environment variable HEALTHCHECKS_UUID has not been " +
+                    "set. To run API-related tests, please change this!");
             return;
+        }
+
+        Healthchecks healthchecks = Healthchecks.forUuid(uuid);
 
         final CompletableFuture<Response> then = healthchecks.start();
         try {

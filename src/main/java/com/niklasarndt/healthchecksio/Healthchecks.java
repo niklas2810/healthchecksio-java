@@ -1,5 +1,7 @@
 package com.niklasarndt.healthchecksio;
 
+import com.niklasarndt.healthchecksio.exception.UnauthorizedException;
+import com.niklasarndt.healthchecksio.model.Check;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -14,10 +16,18 @@ import java.util.concurrent.CompletableFuture;
 
 public class Healthchecks {
 
-    private static final Logger LOG = LoggerFactory.getLogger(Healthchecks.class);
-    private static final UserAgentInterceptor userAgent = new UserAgentInterceptor();
-    private static final MediaType plainTextType = MediaType.parse("text/plain");
+    protected static final UserAgentInterceptor USER_AGENT = new UserAgentInterceptor();
+    protected static final Logger LOG = LoggerFactory.getLogger(Healthchecks.class);
+    protected static final MediaType PLAIN_TEXT = MediaType.parse("text/plain");
     private static final String HEALTHCHECKS_HOST = "https://hc-ping.com/";
+
+    public static HealthchecksManager manager(String host, String apiKey) {
+        return new HealthchecksManager(host, apiKey);
+    }
+
+    public static HealthchecksManager manager(String apiKey) {
+        return new HealthchecksManager(apiKey);
+    }
 
     /**
      * <p>Creates a new healthchecks.io Client.</p>
@@ -76,11 +86,37 @@ public class Healthchecks {
         return new Healthchecks(hostUrl, uuid);
     }
 
+    protected static String validateUrl(String host) {
+        try {
+            URL url = new URL(host);
+            if (url.getHost() == null || url.getHost().length() == 0)
+                throw new IllegalArgumentException("No host specified in " + url.toString());
+
+            return url.getProtocol() + "://" + url.getHost()
+                    + (url.getPort() != -1 ? ":" + url.getPort() : "")
+                    + url.getPath();
+        } catch (MalformedURLException e) {
+            throw new IllegalArgumentException("The host URL " + host + " is invalid!", e);
+        }
+    }
+
+    public static Healthchecks forCheck(Check check) {
+        if (check.isReadOnly())
+            throw new UnauthorizedException();
+
+        return new Healthchecks(check.getPingUrl());
+    }
+
     private final OkHttpClient client = new OkHttpClient.Builder()
-            .addInterceptor(userAgent).build();
+            .addInterceptor(USER_AGENT).build();
     private final String host;
     private final String uuid;
     private final String baseUrl;
+
+    private Healthchecks(URL base) {
+        this(base.toString().substring(0, base.toString().lastIndexOf("/")),
+                base.toString().substring(base.toString().lastIndexOf("/") + 1));
+    }
 
     private Healthchecks(String uuid) {
         this(HEALTHCHECKS_HOST, uuid);
@@ -97,25 +133,10 @@ public class Healthchecks {
         else //Skip URL validation for default host (already validated)
             this.host = host;
 
-
         this.uuid = uuid;
 
         this.baseUrl = this.host + uuid;
         LOG.debug("Host url has been set to {}", this.host);
-    }
-
-    private String validateUrl(String host) {
-        try {
-            URL url = new URL(host);
-            if (url.getHost() == null || url.getHost().length() == 0)
-                throw new IllegalArgumentException("No host specified in " + url.toString());
-
-            return url.getProtocol() + "://" + url.getHost()
-                    + (url.getPort() != -1 ? ":" + url.getPort() : "")
-                    + url.getPath();
-        } catch (MalformedURLException e) {
-            throw new IllegalArgumentException("The host URL " + host + " is invalid!", e);
-        }
     }
 
     /**
@@ -255,9 +276,10 @@ public class Healthchecks {
 
         Request.Builder builder = new Request.Builder()
                 .url(baseUrl + path);
-
         if (body != null)
-            builder.post(RequestBody.create(plainTextType, body));
+            builder.post(RequestBody.create(body, PLAIN_TEXT));
+        else
+            builder.get();
 
         OkHttpResponseFuture callback = new OkHttpResponseFuture();
 
