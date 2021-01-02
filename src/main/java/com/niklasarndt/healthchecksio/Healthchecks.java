@@ -22,11 +22,11 @@ public class Healthchecks {
     private static final String HEALTHCHECKS_HOST = "https://hc-ping.com/";
 
     public static HealthchecksManager manager(String host, String apiKey) {
-        return new HealthchecksManager(host, apiKey);
+        return new HealthchecksManagerImpl(host, apiKey);
     }
 
     public static HealthchecksManager manager(String apiKey) {
-        return new HealthchecksManager(apiKey);
+        return new HealthchecksManagerImpl(apiKey);
     }
 
     /**
