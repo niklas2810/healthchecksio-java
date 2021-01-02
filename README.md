@@ -40,7 +40,7 @@ Maven:
 <dependency>
   <groupId>com.niklasarndt</groupId>
   <artifactId>healthchecksio-java</artifactId>
-  <version>1.0.0</version>
+  <version>1.0.1</version>
 </dependency>
 ```
 
@@ -72,6 +72,22 @@ Every method also supports an attached message:
 ```java
 client.fail("Could not execute the job: " + reason); //Sends this string to healthchecks.io, which will be visible on the dashboard
 ```
+
+The same applies to the Manager:
+
+```java
+HealthchecksManager manager = Healthchecks.manager("<api-key>");
+```
+
+Read more about the [Management API](https://github.com/niklas2810/healthchecksio-java/wiki/Using-the-Manager)
+in the wiki for further instructions, here's a quick example:
+
+```java
+Check[] filteredChecks = manager.getExistingChecks("cron debian").get(); //Retrieve all checks with tags "cron" and "debian"
+```
+
+To find out more about using the API, 
+[visit the wiki](https://github.com/niklas2810/healthchecksio-java/wiki)!
 
 This library has a `slf4-api`(https://mvnrepository.com/artifact/org.slf4j/slf4j-api) implementation which produces debug logging output. To prevent this from happening, add this line to your `logback.xml`:
 

@@ -6,7 +6,7 @@
 
     <groupId>com.niklasarndt</groupId>
     <artifactId>healthchecksio-java</artifactId>
-    <version>1.0.1-SNAPSHOT</version>
+    <version>1.0.1</version>
     <packaging>jar</packaging>
 
     <name>Healthchecks.io API Wrapper for Java</name>
