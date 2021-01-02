@@ -1,6 +1,7 @@
 package com.niklasarndt.healthchecks;
 
 import com.niklasarndt.healthchecksio.Healthchecks;
+import com.niklasarndt.healthchecksio.HealthchecksClient;
 import com.niklasarndt.healthchecksio.HealthchecksInfo;
 import okhttp3.Response;
 import static org.junit.jupiter.api.Assertions.*;
@@ -22,7 +23,7 @@ public class Tests {
             return;
         }
 
-        Healthchecks healthchecks = Healthchecks.forUuid(uuid);
+        HealthchecksClient healthchecks = Healthchecks.forUuid(uuid);
 
         final CompletableFuture<Response> then = healthchecks.start();
         try {
