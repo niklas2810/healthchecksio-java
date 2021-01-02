@@ -9,6 +9,8 @@ import java.io.IOException;
  * <p>Internal class for changing the user agent of each request.</p>
  * <br>
  * <p>The user agent will look like this: {@code healthchecksio-java:<version>}</p>
+ *
+ * @since 1.0.1
  */
 public class UserAgentInterceptor implements Interceptor {
 

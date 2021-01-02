@@ -14,6 +14,8 @@ import java.util.concurrent.CompletableFuture;
  * </p>
  * <br>
  * <p>With much inspiration from <a href="https://stackoverflow.com/questions/42308439/java-retrieving-result-from-okhttp-asynchronous-get">stackoverflow</a>.</p>
+ *
+ * @since 1.0.0
  */
 public class OkHttpResponseFuture implements Callback {
 
