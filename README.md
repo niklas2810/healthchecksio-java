@@ -116,6 +116,8 @@ Pull requests are always very much appreciated, but I hope you'll forgive me if 
 
 - [OkHttp3](https://github.com/square/okhttp)
 - [slf4j-api](https://mvnrepository.com/artifact/org.slf4j/slf4j-api)
+- [jackson-databind](https://github.com/FasterXML/jackson)
+- [lombok](https://projectlombok.org/)
 
 Unit Testing:
 
