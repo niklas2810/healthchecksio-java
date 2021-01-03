@@ -106,6 +106,8 @@ You can also use this library with your self-hosted instance. To do this, simply
 HealthchecksClient client = Healthchecks.forUuid("https://healthchecks.example.com", "<uuid>"); 
 ```
 
+The same scheme applies to the manager ([wiki](https://github.com/niklas2810/healthchecksio-java/wiki/Using-the-Manager#create-a-manager-object)).
+
 ## Contributing
 
 If you have any questions regarding the project or spotted a bug, feel free to open an issue!
