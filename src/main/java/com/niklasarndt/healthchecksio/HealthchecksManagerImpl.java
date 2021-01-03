@@ -15,6 +15,8 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Objects;
@@ -28,6 +30,7 @@ import java.util.concurrent.CompletableFuture;
  */
 public class HealthchecksManagerImpl implements HealthchecksManager {
 
+    private static final Logger LOG = LoggerFactory.getLogger(HealthchecksManager.class);
     private static final String HEALTHCHECKS_HOST = "https://healthchecks.io";
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
@@ -42,7 +45,7 @@ public class HealthchecksManagerImpl implements HealthchecksManager {
 
             String body;
             try {
-                body = response.body().string();
+                body = Objects.requireNonNull(response.body()).string();
             } catch (IOException e) {
                 throw new IllegalStateException("Could not read response from healthchecks.io!", e);
             }
@@ -76,7 +79,6 @@ public class HealthchecksManagerImpl implements HealthchecksManager {
 
     private final OkHttpClient client = new OkHttpClient.Builder()
             .addInterceptor(Healthchecks.USER_AGENT).build();
-    private final String host;
     private final String token;
     private final String baseUrl;
 
@@ -90,13 +92,11 @@ public class HealthchecksManagerImpl implements HealthchecksManager {
         host = host.trim();
 
         //URL validation
-        if (!host.equals(HEALTHCHECKS_HOST))
-            this.host = Healthchecks.validateUrl(host);
-        else //Skip URL validation for default host (already validated)
-            this.host = host;
+        String validatedHost = host.equals(HEALTHCHECKS_HOST) ?
+                host : Healthchecks.validateUrl(host);
 
         this.token = token;
-        this.baseUrl = host + (host.endsWith("/") ? "api/v1" : "/api/v1");
+        this.baseUrl = validatedHost + (validatedHost.endsWith("/") ? "api/v1" : "/api/v1");
     }
 
     @Override
@@ -116,7 +116,7 @@ public class HealthchecksManagerImpl implements HealthchecksManager {
 
             String body;
             try {
-                body = response.body().string();
+                body = Objects.requireNonNull(response.body()).string();
             } catch (IOException e) {
                 throw new IllegalStateException("Could not read response from healthchecks.io!", e);
             }
@@ -221,7 +221,6 @@ public class HealthchecksManagerImpl implements HealthchecksManager {
     private CompletableFuture<Response> request(String path, String body) {
         String url = baseUrl + path;
 
-
         Request.Builder builder = new Request.Builder()
                 .addHeader("X-Api-Key", token)
                 .url(url);
@@ -237,7 +236,7 @@ public class HealthchecksManagerImpl implements HealthchecksManager {
     private CompletableFuture<Response> request(Request request) {
         OkHttpResponseFuture callback = new OkHttpResponseFuture();
 
-        Healthchecks.LOG.debug("Sending request to  {} via {} (has body: {})",
+        LOG.debug("Sending request to  {} via {} (has body: {})",
                 request.url().toString(), request.method(), request.body() != null);
 
         client.newCall(request).enqueue(callback);

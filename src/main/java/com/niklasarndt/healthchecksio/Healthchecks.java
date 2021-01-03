@@ -5,8 +5,6 @@ import com.niklasarndt.healthchecksio.model.Check;
 import com.niklasarndt.healthchecksio.util.UserAgentInterceptor;
 import okhttp3.MediaType;
 import okhttp3.Response;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.concurrent.CompletableFuture;
@@ -22,7 +20,6 @@ import java.util.concurrent.CompletableFuture;
 public class Healthchecks {
 
     protected static final UserAgentInterceptor USER_AGENT = new UserAgentInterceptor();
-    protected static final Logger LOG = LoggerFactory.getLogger(Healthchecks.class);
     protected static final MediaType PLAIN_TEXT = MediaType.parse("text/plain");
 
     /**
@@ -119,7 +116,7 @@ public class Healthchecks {
      * @throws IllegalArgumentException If the {@code hostUrl} is invalid.
      *                                  The bare minimum is something like {@code http://localhost},
      *                                  but the Protocol (http/https), Host (e.g. hc-ping.com),
-     *                                  (optionally) custom Port (e.g. 8080) and subpath (e.g. /healthchecks)
+     *                                  (optionally) custom Port (e.g. 8080) and sub path (e.g. /healthchecks)
      *                                  will be taken into account as well!
      */
     public static HealthchecksClient forUuid(String hostUrl, String uuid) {

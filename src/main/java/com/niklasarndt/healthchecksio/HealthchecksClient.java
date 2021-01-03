@@ -29,7 +29,7 @@ public interface HealthchecksClient {
      * @return A {@link CompletableFuture} with a
      *         * {@link Response} object. Use {@link CompletableFuture#get()} to retrieve your response!
      */
-    public CompletableFuture<Response> start(String body);
+    CompletableFuture<Response> start(String body);
 
     /**
      * <p>Notifies healthchecks.io about the (successful) completion of an event.</p>
@@ -49,7 +49,7 @@ public interface HealthchecksClient {
      * @return A {@link CompletableFuture} with a
      *         * {@link Response} object. Use {@link CompletableFuture#get()} to retrieve your response!
      */
-    public CompletableFuture<Response> success(String body);
+    CompletableFuture<Response> success(String body);
 
     /**
      * <p>Notifies healthchecks.io about the failure of an event.</p>
@@ -69,7 +69,7 @@ public interface HealthchecksClient {
      * @return A {@link CompletableFuture} with a
      *         * {@link Response} object. Use {@link CompletableFuture#get()} to retrieve your response!
      */
-    public CompletableFuture<Response> fail(String body);
+    CompletableFuture<Response> fail(String body);
 
     /**
      * <p>Notifies healthchecks.io about the completion of an event with
@@ -96,5 +96,5 @@ public interface HealthchecksClient {
      * @return A {@link CompletableFuture} with a
      *         * {@link Response} object. Use {@link CompletableFuture#get()} to retrieve your response!
      */
-    public CompletableFuture<Response> exitCode(int code, String body);
+    CompletableFuture<Response> exitCode(int code, String body);
 }

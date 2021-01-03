@@ -8,7 +8,7 @@
 <img alt="GitHub Build" src="https://img.shields.io/github/workflow/status/niklas2810/healthchecksio-java/Build%20Project?logo=github&style=for-the-badge">
 </a>
 <a href="https://niklas2810.github.io/healthchecksio-java/apidocs/">
-<img alt="Javadocs Link" src="https://img.shields.io/badge/Javadocs-Link-yellow?style=for-the-badge">
+<img alt="Javadoc Link" src="https://img.shields.io/badge/Javadocs-Link-yellow?style=for-the-badge">
 </a>
 </p>
 

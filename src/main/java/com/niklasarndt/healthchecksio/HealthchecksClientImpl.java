@@ -5,6 +5,8 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import java.net.URL;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
@@ -17,13 +19,13 @@ import java.util.concurrent.CompletableFuture;
  */
 public class HealthchecksClientImpl implements HealthchecksClient {
 
+    private static final Logger LOG = LoggerFactory.getLogger(HealthchecksClient.class);
     private static final String HEALTHCHECKS_HOST = "https://hc-ping.com/";
 
     private final OkHttpClient client = new OkHttpClient.Builder()
             .addInterceptor(Healthchecks.USER_AGENT)
             .build();
     private final String host;
-    private final String uuid;
     private final String baseUrl;
 
     protected HealthchecksClientImpl(URL base) {
@@ -46,10 +48,8 @@ public class HealthchecksClientImpl implements HealthchecksClient {
         else //Skip URL validation for default host (already validated)
             this.host = host;
 
-        this.uuid = uuid;
-
         this.baseUrl = this.host + uuid;
-        Healthchecks.LOG.debug("Host url has been set to {}", this.host);
+        LOG.debug("Host url has been set to {}", this.host);
     }
 
     @Override
@@ -102,14 +102,14 @@ public class HealthchecksClientImpl implements HealthchecksClient {
      * <p>Afterwards a new call in enqueued, and the {@link CompletableFuture}
      * object is returned.</p>
      *
-     * @param path The subpath in the URL, e.g. {@code /fail} or {@code /1} (for exit code one).
+     * @param path The sub path in the URL, e.g. {@code /fail} or {@code /1} (for exit code one).
      * @param body A message (plain text) which will be stored on healthchecks.io, together with this status message.
      *
      * @return A {@link CompletableFuture} with a
      *         * {@link Response} object. Use {@link CompletableFuture#get()} to retrieve your response!
      */
     private CompletableFuture<Response> sendHeartbeat(String path, String body) {
-        Healthchecks.LOG.debug("Sending signal to path {} (host: {}, has body: {})",
+        LOG.debug("Sending signal to path {} (host: {}, has body: {})",
                 path, host, body != null);
 
         Request.Builder builder = new Request.Builder()

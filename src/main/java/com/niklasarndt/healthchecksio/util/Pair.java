@@ -4,7 +4,7 @@ import lombok.Getter;
 
 /**
  * <p>A generic representation of a bundle of two values, since native Java
- * doesnt have one.</p>
+ * doesn't have one.</p>
  *
  * @param <K> The content type of the left value.
  * @param <V> The content type of the right value.

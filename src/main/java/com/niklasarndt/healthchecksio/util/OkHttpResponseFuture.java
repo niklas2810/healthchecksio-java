@@ -45,7 +45,7 @@ public class OkHttpResponseFuture implements Callback {
      * {@inheritDoc}
      */
     @Override
-    public void onResponse(Call call, Response response) throws IOException {
+    public void onResponse(Call call, Response response) {
         LOG.debug("Completed call to {}, response is {}",
                 call.request().url().pathSegments()
                         .get(call.request().url().pathSegments().size() - 1),
