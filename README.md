@@ -46,7 +46,7 @@ Maven:
 
 Gradle:
 ```gradle
-implementation 'com.niklasarndt:healthchecksio-java:1.0.0'
+implementation 'com.niklasarndt:healthchecksio-java:1.0.1'
 ```
 
 ## Quick Start
