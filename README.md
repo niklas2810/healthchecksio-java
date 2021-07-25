@@ -39,14 +39,14 @@ Maven:
 ```xml
 <dependency>
   <groupId>com.niklasarndt</groupId>
-  <artifactId>healthchecksio-java</artifactId>
-  <version>1.0.1</version>
+    <artifactId>healthchecksio-java</artifactId>
+    <version>1.0.2</version>
 </dependency>
 ```
 
 Gradle:
 ```gradle
-implementation 'com.niklasarndt:healthchecksio-java:1.0.1'
+implementation 'com.niklasarndt:healthchecksio-java:1.0.2'
 ```
 
 ## Quick Start
